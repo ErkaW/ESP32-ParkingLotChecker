@@ -41,14 +41,14 @@ def break_loop(event):
 
         with open(savePath, 'w') as f:
             for i, pts in enumerate(total_points, start=1):
-                data = "-\nID: {}\nPoints: {}\n".format(i, pts.tolist())
+                data = str(i) + "," + str(pts[0][0]) + "," + str(pts[0][1]) + "," + str(pts[1][0]) + "," + str(pts[1][1]) + "," + str(pts[2][0]) + "," + str(pts[2][1]) + "," + str(pts[3][0]) + "," + str(pts[3][1]) + "\n"
                 f.write(data)
 
         print("Data saved in " + savePath + " files")
         exit()
 
 def onkeypress(event):
-    global points, prev_points, total_points
+    global points, prev_points, total_points, patches
     if event.key == 'n':
         pts = np.array(points, dtype=np.int32)
         if points != prev_points and len(set(points)) == 4:
@@ -56,10 +56,12 @@ def onkeypress(event):
             patches.append(Polygon(pts))
             total_points.append(pts)
             prev_points = points
+            # Clear the patches list to remove previous quadrilaterals
+            patches = []
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('video_path', help="Path of video file")
+    parser.add_argument('image_path', help="Path of image file")
     parser.add_argument('--out_file', help="Name of the output file", default="regions.txt")
     args = parser.parse_args()
 
@@ -75,23 +77,12 @@ if __name__ == '__main__':
     print("> After marking a quadrilateral, press 'n' to save the current quadrilateral, and then press 'q' to start marking a new quadrilateral")
     print("> When you are done, press 'b' to exit the program\n")
 
-    video_capture = cv2.VideoCapture(args.video_path)
-    cnt = 0
-    rgb_image = None
-    while video_capture.isOpened():
-        success, frame = video_capture.read()
-        if not success:
-            break
-        if cnt == 5:
-            rgb_image = frame[:, :, ::-1]
-        cnt += 1
-    video_capture.release()
-
     while True:
-        fig, ax = plt.subplots()
-        image = rgb_image
-        ax.imshow(image)
+        image = cv2.imread(args.image_path)
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
+        fig, ax = plt.subplots()
+        ax.imshow(rgb_image)
         p = PatchCollection(patches, alpha=0.7)
         p.set_array(10 * np.ones(len(patches)))
         ax.add_collection(p)
@@ -101,3 +92,5 @@ if __name__ == '__main__':
         break_event = plt.connect('key_press_event', break_loop)
         plt.show()
         globSelect.disconnect()
+        # Clear the patches list after each quadrilateral is marked
+        patches = []

@@ -1,7 +1,14 @@
 # ESP32-ParkingLotChecker
 
+## Using Programs
+- Arduino IDE / CLI
+- VS Code 
+- Python
+- OpenCV
+
 ## Introduction
 
+still WIP :)
 
 ## Contributors
 - Mohammad Amrizal Kurniansyah
