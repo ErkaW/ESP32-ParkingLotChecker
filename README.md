@@ -11,7 +11,7 @@
 still WIP :)
 
 ## Contributors
-- Mohammad Amrizal Kurniansyah
-- Maulana Muhammad Ali
-- Wafi Athanusa Sakti
-- Manfredy Patarida Hasiholan Manurung
+- Mohammad Amrizal Kurniansyah -- Raspi4B
+- Maulana Muhammad Ali -- FLask + ESP32 CAM
+- Wafi Athanusa Sakti -- Raspi4B
+- Manfredy Patarida Hasiholan Manurung -- Prototype Maker
