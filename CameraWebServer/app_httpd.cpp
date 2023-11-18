@@ -1236,7 +1236,7 @@ void startCameraServer()
     httpd_uri_t cmd_uri = {
         .uri = "/control",
         .method = HTTP_GET,
-        .handler = cmd_handler,
+        .handler= cmd_handler,
         .user_ctx = NULL
 #ifdef CONFIG_HTTPD_WS_SUPPORT
         ,

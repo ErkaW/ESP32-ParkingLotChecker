@@ -11,19 +11,15 @@ Servo myservo;
 int gateStatus = 0; // 0 for closed, 1 for open
 int servoPos = 0;
 
-const int trigPin1 = 5; // Ultrasonic sensor 1
-const int echoPin1 = 18;
-const int trigPin2 = 19; // Ultrasonic sensor 2
-const int echoPin2 = 21;
+const int trigPin = 5; // Ultrasonic sensor
+const int echoPin = 18;
 const float SOUND_SPEED = 0.034;
 const float CM_TO_INCH = 0.393701;
 
 void setup() {
   Serial.begin(115200);
-  pinMode(trigPin1, OUTPUT);
-  pinMode(echoPin1, INPUT);
-  pinMode(trigPin2, OUTPUT);
-  pinMode(echoPin2, INPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
 
   myservo.attach(13);
   servoClose();
@@ -36,15 +32,14 @@ void setup() {
   }
 
   Serial.println("Connected to WiFi");
-  Serial.println("IP Address: ");
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     if (gateStatus == 0) {
-      request->send(200, "text/plain", "Gate is closed");
+      request->send(200, "text/plain", "0");
     } else {
-      request->send(200, "text/plain", "Gate is open");
+      request->send(200, "text/plain", "1");
     }
-  };
+  });
   server.begin();
 }
 
@@ -52,15 +47,12 @@ void loop() {
   // No need for server.handleClient() in the loop with AsyncWebServer.
   // Instead, the server handles requests asynchronously.
 
-  float distanceCm1 = measureDistance(trigPin1, echoPin1);
-  float distanceCm2 = measureDistance(trigPin2, echoPin2);
+  float distanceCm = measureDistance(trigPin, echoPin);
 
-  Serial.print("Distance 1 (cm): ");
-  Serial.println(distanceCm1);
-  Serial.print("Distance 2 (cm): ");
-  Serial.println(distanceCm2);
+  Serial.print("Distance (cm): ");
+  Serial.println(distanceCm);
 
-  if (distanceCm1 <= 5 || distanceCm2 <= 5) {
+  if (distanceCm <= 7) {
     if (gateStatus == 0) {
       servoOpen();
       gateStatus = 1;
