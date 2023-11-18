@@ -36,15 +36,15 @@ void setup() {
   }
 
   Serial.println("Connected to WiFi");
+  Serial.println("IP Address: ");
 
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    String status = (gateStatus == 1) ? "Open" : "Closed";
-    String html = "<html><body>";
-    html += "<p>Gate Status: " + status + "</p>";
-    html += "</body></html>";
-    request->send(200, "text/html", html);
-  });
-
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    if (gateStatus == 0) {
+      request->send(200, "text/plain", "Gate is closed");
+    } else {
+      request->send(200, "text/plain", "Gate is open");
+    }
+  };
   server.begin();
 }
 
