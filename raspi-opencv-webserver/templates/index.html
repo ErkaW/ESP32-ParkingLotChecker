@@ -3,20 +3,9 @@
 <html>
     <head>
         <title>Smart Parking System</title>
-        <style>
-            .grid-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-}
-        </style>
     </head>
     <body>
         <center><h1>Smart Parking System</h1></center>
-        <div class="grid-container">
-            <div class="grid-child black">
-                <center><img src="{{ url_for('video_feed') }}" width="100%"></center>
-            </div>
-        </div>
+        <center><img src="{{ url_for('video_feed') }}" width="50%"></center>
     </body>
 </html>

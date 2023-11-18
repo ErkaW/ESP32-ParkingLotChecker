@@ -7,8 +7,8 @@ import requests
 from datetime import datetime
 
 # URL video streaming
-url = "http://192.168.137.211"
-gate_url = "http://192.168.137.36"
+url = "http://192.168.137.134"
+gate_url = "http://192.168.137.248"
 
 # Region parking disini
 spot_txt = os.path.join(os.path.dirname(__file__), "regions.txt")
@@ -96,7 +96,11 @@ def gen_frames():
         cv2.putText(frame, "Last Update: {}".format(current_time), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
 
         # Overlay gate status
-        gate_status = requests.get(gate_url).text
+        gate_st = requests.get(gate_url).text
+        if gate_st == "1": 
+            gate_status = "Open"
+        else:
+            gate_status = "Closed"
         cv2.putText(frame, "Gate Status: {}".format(gate_status), (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
 
         # Encode frame ke JPEG
@@ -115,4 +119,4 @@ def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5050, debug=True)
